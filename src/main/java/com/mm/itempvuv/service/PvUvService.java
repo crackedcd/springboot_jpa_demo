@@ -1,12 +1,12 @@
 package com.mm.itempvuv.service;
 
 import com.mm.itempvuv.common.util.DateUtil;
-import com.mm.itempvuv.jpa.entity.AdsYymhRealItemPvUvTdEntity;
-import com.mm.itempvuv.jpa.repository.PvUvRepository;
+import com.mm.itempvuv.common.util.PageableUtil;
+import com.mm.itempvuv.jpa.qbi.entity.AdsYymhRealItemPvUvTdEntity;
+import com.mm.itempvuv.jpa.qbi.repository.PvUvRepository;
+import org.apache.shiro.authz.annotation.RequiresAuthentication;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -26,7 +26,7 @@ public class PvUvService {
         int ysUv = 0;
         int totalPv = 0;
         int totalUv = 0;
-        Pageable pageable = getPageableDesc("itemPvTd", 0, 1000);
+        Pageable pageable = PageableUtil.getPageableDesc("itemPvTd", 0, 1000);
         if (ds.equals("nothing")) {
             ds = DateUtil.getDateStrBeforeToday(0);
         }
@@ -55,11 +55,5 @@ public class PvUvService {
         return str.toString();
     }
 
-    private Pageable getPageableAsc(String col, int page, int pageSize) {
-        return PageRequest.of(page, pageSize, new Sort(Sort.Direction.ASC, col));
-    }
 
-    private Pageable getPageableDesc(String col, int page, int pageSize) {
-        return PageRequest.of(page, pageSize, new Sort(Sort.Direction.DESC, col));
-    }
 }
