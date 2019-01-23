@@ -20,7 +20,7 @@ public class ItempvuvApplicationTests {
 
     @Test
     public void test() throws Exception {
-        payService.test();
+        payService.openData();
     }
 
 }

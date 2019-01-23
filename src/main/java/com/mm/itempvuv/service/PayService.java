@@ -77,6 +77,7 @@ public class PayService {
             payData.add(pay);
         }
 
+/*
         // 遍历实时列表, 反查商品名称对应类目
         for (RealtimePayModel r : realtimeData) {
             List<String> cate = cateMap.get(r.getItemName());
@@ -109,34 +110,71 @@ public class PayService {
                 ));
             }
         }
+*/
 
+        // long totalCnt = 0;
+        // BigDecimal totalAmt = BigDecimal.valueOf(0);
         // for (PayModel p : payData) {
-        //     System.out.println(p.toString());
+        //     totalCnt += p.getOrdCnt();
+        //     totalAmt = totalAmt.add(p.getAmtCnt());
         // }
-
-        // System.out.println(offlineData.size());
-        // System.out.println(realtimeData.size());
-        // System.out.println(payData.size());
-
-        long totalCnt = 0;
-        BigDecimal totalAmt = BigDecimal.valueOf(0);
-        for (PayModel p : payData) {
-            totalCnt += p.getOrdCnt();
-            totalAmt = totalAmt.add(p.getAmtCnt());
-        }
-        payData.add(new PayModel(
-                "合计",
-                "",
-                "",
-                "",
-                totalCnt,
-                totalAmt
-        ));
+        // payData.add(new PayModel(
+        //         "合计",
+        //         "",
+        //         "",
+        //         "",
+        //         totalCnt,
+        //         totalAmt
+        // ));
 
         return payData;
     }
 
-    public void test() {
+    public Map<String, Object> openData() throws Exception {
+        Map<String, Object> result = new TreeMap<>();
+        result.put("status", 0);
+        result.put("msg", "error");
 
+        Map<String, Object> data = new TreeMap<>();
+        List<Map<String, String>> columns = new ArrayList<>();
+        List<Map<String, Object>> rows = new ArrayList<>();
+
+        Map<String, String> c1 = new TreeMap<>();
+        c1.put("name", "平台");
+        c1.put("id", "channelName");
+        columns.add(c1);
+        Map<String, String> c2 = new TreeMap<>();
+        c2.put("name", "品牌");
+        c2.put("id", "brandName");
+        columns.add(c2);
+        Map<String, String> c3 = new TreeMap<>();
+        c3.put("name", "商品名称");
+        c3.put("id", "itemName");
+        columns.add(c3);
+        Map<String, String> c4 = new TreeMap<>();
+        c4.put("name", "订单数");
+        c4.put("id", "ordCnt");
+        columns.add(c4);
+        Map<String, String> c5 = new TreeMap<>();
+        c5.put("name", "有效金额");
+        c5.put("id", "payAmt");
+        columns.add(c5);
+
+        List<PayModel> payData = getData();
+        for (PayModel p : payData) {
+            Map<String, Object> r = new TreeMap<>();
+            r.put("channelName", p.getChannelName());
+            r.put("brandName", p.getCateLevel2Name());
+            r.put("itemName", p.getItemName());
+            r.put("ordCnt", p.getOrdCnt());
+            r.put("payAmt", p.getAmtCnt());
+            rows.add(r);
+        }
+
+        data.put("columns", columns);
+        data.put("rows", rows);
+
+        result.put("data", data);
+        return result;
     }
 }
